@@ -13,17 +13,53 @@ function Invoke-FileAnalysis {
     
     # Define filesystem-related plugins
     $plugins = @(
-        @{Name = "windows.filescan"; Description = "Scan for file objects"}
+        @{
+            Name = "windows.filescan"
+            Description = "Scan for file objects"
+            ForceUTF8 = $true # Force UTF-8 encoding for this plugin
+        }
     )
     
     # Execute each plugin
     foreach ($plugin in $plugins) {
         Write-Host "Running $($plugin.Name): $($plugin.Description)" -ForegroundColor Yellow
         $outputFile = "$($plugin.Name).txt"
-        $output = Invoke-Volatility -Config $Config -Plugin $plugin.Name -OutputDir $outputDir -OutputFileName $outputFile
         
-        if ($output) {
-            Set-AnalysisResult -Config $Config -Category "filesystem" -Plugin $plugin.Name -OutputFile $output
+        # Handle encoding-sensitive plugins differently
+        if ($plugin.ForceUTF8) {
+            $outputPath = Join-Path $outputDir $outputFile
+            $errorFile = Join-Path $outputDir "$($plugin.Name)_errors.txt"
+            $batchFile = Join-Path $outputDir "run_vol_utf8.bat"
+            $volCommand = "$($Config.VolatilityCmd) -f `"$($Config.MemoryDump)`" $($plugin.Name)"
+            
+            # Create a batch file with UTF-8 encoding setup
+            @"
+@echo off
+chcp 65001 >nul
+$volCommand > "$outputPath" 2> "$errorFile"
+"@ | Out-File -FilePath $batchFile -Encoding ascii
+            
+            # Run the batch file
+            Write-Host "Running with UTF-8 encoding for $($plugin.Name)" -ForegroundColor Yellow
+            cmd /c $batchFile
+            
+            # Clean up batch file
+            Remove-Item $batchFile -Force -ErrorAction SilentlyContinue
+            
+            if (Test-Path $outputPath) {
+                Write-Host "Successfully executed $($plugin.Name) with UTF-8 encoding" -ForegroundColor Green
+                Set-AnalysisResult -Config $Config -Category "filesystem" -Plugin $plugin.Name -OutputFile $outputPath
+            } else {
+                Write-Warning "Failed to create output file for $($plugin.Name)"
+            }
+        }
+        else {
+            # Standard execution for non-UTF8 plugins
+            $output = Invoke-Volatility -Config $Config -Plugin $plugin.Name -OutputDir $outputDir -OutputFileName $outputFile
+            
+            if ($output) {
+                Set-AnalysisResult -Config $Config -Category "filesystem" -Plugin $plugin.Name -OutputFile $output
+            }
         }
     }
     

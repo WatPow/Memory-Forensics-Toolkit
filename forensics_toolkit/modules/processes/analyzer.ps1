@@ -43,6 +43,7 @@ function Invoke-ProcessAnalysis {
             Name = "windows.handles"
             OutputFile = "process_handles.txt"
             Description = "Handles opened by processes"
+            ForceUTF8 = $true # Force UTF-8 encoding for this plugin
         },
         @{
             Name = "windows.malfind"
