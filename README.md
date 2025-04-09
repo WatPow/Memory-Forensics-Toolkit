@@ -172,8 +172,3 @@ Les contributions sont les bienvenues! Veuillez suivre ces étapes:
 ## Licence
 
 Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
-
-## Remerciements
-
-- L'équipe du Framework Volatility pour leur exceptionnel outil de forensique mémoire
-- La communauté de forensique numérique pour leur recherche continue et le partage de connaissances 
