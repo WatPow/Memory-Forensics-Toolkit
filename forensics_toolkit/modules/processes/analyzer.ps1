@@ -28,11 +28,13 @@ function Invoke-ProcessAnalysis {
             Name = "windows.pstree"
             OutputFile = "process_tree_alt.txt"
             Description = "Alternative process tree view"
+            ForceUTF8 = $true # Force UTF-8 encoding for this plugin
         },
         @{
             Name = "windows.cmdline"
             OutputFile = "process_command_lines.txt"
             Description = "Command lines for each process"
+            ForceUTF8 = $true # Force UTF-8 encoding for this plugin
         },
         @{
             Name = "windows.dlllist"
