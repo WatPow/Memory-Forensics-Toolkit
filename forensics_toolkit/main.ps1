@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 
 # ForensicToolkit - Main Script
-# Author: Claude
+# Author: WatPow
 # Description: Forensic Analysis Tool for Windows Memory Dumps using Volatility 3
 
 # Import modules
