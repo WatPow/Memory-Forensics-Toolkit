@@ -1,0 +1,43 @@
+# Output directories
+output/
+
+# Memory dumps (these are large binary files)
+*.raw
+*.dmp
+*.mem
+*.vmem
+*.bin
+
+# PowerShell logs
+*.log
+*.log.txt
+
+# Temporary files
+*.tmp
+*_temp*
+temp/
+tmp/
+
+# Python cache files (from Volatility)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# VS Code files
+.vscode/
+*.code-workspace
+
+# PowerShell history files
+PSReadLine/ 
